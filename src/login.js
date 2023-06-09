@@ -17,10 +17,27 @@ const LoginForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const confirm = true;
-    // место для логики, например, отправить данные на сервер
     if (confirm) {
+      //проверка логина и пароль на существование, удали после проверки!!! При нажатии на кнопку, логин и пароль будет выведен в консоль
+      console.log(login, password);
+      fetch("Я ссылка на сервер", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: login,
+          password: password,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     }
-    // Сбросить значения полей после отправки формы
     setLogin("");
     setPassword("");
   };
