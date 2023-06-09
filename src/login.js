@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./login.css";
 
 const LoginForm = () => {
+  const navigate = useNavigate();
+  const [redirect, setRedirect] = useState(false);
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
 
@@ -19,7 +22,6 @@ const LoginForm = () => {
     const confirm = true;
     if (confirm) {
       //проверка логина и пароль на существование, удали после проверки!!! При нажатии на кнопку, логин и пароль будет выведен в консоль
-      console.log(login, password);
       fetch("Я ссылка на сервер", {
         method: "POST",
         headers: {
@@ -30,9 +32,18 @@ const LoginForm = () => {
           password: password,
         }),
       })
-        .then((response) => response.json())
+        .then((response) => {
+          if (response.ok) {
+            setRedirect(true);
+            return response.json();
+          }
+          throw new Error("Network response was not ok.");
+        })
         .then((data) => {
           console.log(data);
+          if (redirect) {
+            navigate("/главная-страница");
+          }
         })
         .catch((error) => {
           console.error(error);
@@ -63,7 +74,7 @@ const LoginForm = () => {
         />
       </div>
       <button type="submit" className="button">
-        <Link to="/home">Войти</Link>
+        Войти
       </button>
     </form>
   );
